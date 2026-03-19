@@ -1,0 +1,33 @@
+> install.packages("tm")
+> install.packages("wordcloud")
+> install.packages("RColorBrewer")
+> library(tm)
+> library(wordcloud)
+> library(RColorBrewer)
+> library(RColorBrewer)
+> text_data <- c(
++ "Data science is an interdisciplinary field",
++ "Machine learning is part of data science",
++ "Text mining and data mining are important",
++ "R programming is widely used for data analysis"
++ )
+> corpus <- Corpus(VectorSource(text_data))
+> corpus <- tm_map(corpus, content_transformer(tolower))
+> corpus <- tm_map(corpus, removePunctuation)
+> corpus <- tm_map(corpus, removeNumbers)
+> corpus <- tm_map(corpus, removeWords, stopwords("english"))
+> corpus <- tm_map(corpus, stripWhitespace)
+> dtm <- DocumentTermMatrix(corpus)
+> dtm_matrix <- as.matrix(dtm)
+> word_freq <- colSums(dtm_matrix)
+> word_freq <- sort(word_freq, decreasing = TRUE)
+> word_freq
+> wordcloud(
++ names (word_freq),
++ word_freq,
++ min.freq = 1,
++ max.words = 100,
++ random.order = FALSE,
++ colors = brewer.pal (8, "Dark2")
++ )
+>
