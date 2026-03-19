@@ -1,0 +1,10 @@
+str(Titanic)
+df<-as.data.frame(Titanic)
+head(df)
+for(i in 1:4) { titanic.raw <- cbind(titanic.raw, rep(as.character(df[,i]), df$Freq)) } 
+titanic.raw <- as.data.frame(titanic.raw)
+names(titanic.raw) <- names(df)[1:4]
+dim(titanic.raw)
+str(titanic.raw)
+head(titanic.raw)
+summary(titanic.raw)
