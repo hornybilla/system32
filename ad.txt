@@ -1,0 +1,19 @@
+# Install package
+install.packages("isotree")
+# Load library
+library(isotree)
+# Create dataset
+data <- data.frame(
+  transactions = c(100, 120, 130, 150, 170, 200, 500, 210, 220, 230)
+)
+print(data)
+# Train Isolation Forest model
+model <- isolation.forest(data)
+# Predict anomaly scores
+scores <- predict(model, data, type="score")
+print(scores)
+# Add scores to dataset
+data$anomaly_score <- scores
+# Detect anomalies
+data$anomaly <- ifelse(data$anomaly_score > 0.6, "Anomaly", "Normal")
+print(data)
