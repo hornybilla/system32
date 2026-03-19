@@ -1,0 +1,15 @@
+hours <- c(1, 2, 3, 4, 5)
+scores <- c(50, 55, 65, 70, 75)
+data <- data.frame(hours, scores)
+print(data)
+model <- lm(scores ~ hours, data = data)
+summary(model)
+new_data<-data.frame(hours=6)
+predict(model,new_data)
+plot(data$hours, data$scores,
+main = "Linear Regression Example",
+xlab = "Study Hours",
+ylab = "Scores",
+pch = 16)
+# Add regression line
+abline(model, col = "blue")
