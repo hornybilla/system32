@@ -1,0 +1,169 @@
+Pract 1 : Decision Tree 
+str(iris)
+set.seed(1234)
+ind <- sample(2, nrow(iris), replace=TRUE, prob=c(0.7,0.3))
+trainData <- iris[ind==1,]
+testData <- iris[ind==2,]
+liabrary(party)
+install.packages(party)
+install.packages(partykit)
+myFormula <- Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
+iris_ctree <- ctree(myFormula, data=trainData)
+# check the prediction
+table(predict(iris_ctree), trainData$Species)
+print(iris_ctree)
+plot(iris_ctree)
+plot(iris_ctree, type="simple")
+# predict on test data
+testPred <- predict(iris_ctree, newdata = testData)
+table(testPred, testData$Species)
+
+Pract 2 : Text Processing tm
+install.packages("tm")
+install.packages("wordcloud")
+install.packages("RColorBrewer")
+library(tm)
+library(wordcloud)
+library(RColorBrewer)
+library(RColorBrewer)
+text_data <- c(
+"Data science is an interdisciplinary field",
+"Machine learning is part of data science",
+"Text mining and data mining are important",
+"R programming is widely used for data analysis"
+)
+corpus <- Corpus(VectorSource(text_data))
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+corpus <- tm_map(corpus, stripWhitespace)
+dtm <- DocumentTermMatrix(corpus)
+dtm_matrix <- as.matrix(dtm)
+word_freq <- colSums(dtm_matrix)
+word_freq <- sort(word_freq, decreasing = TRUE)
+word_freq
+wordcloud(
+names (word_freq),
+word_freq,
+min.freq = 1,
+max.words = 100,
+random.order = FALSE,
+colors = brewer.pal (8, "Dark2")
+)
+
+Pract 3 : Mean median mode - histogram boxplots
+data<-c(10,15,20,22,25,30,35,40,45,50)
+data
+mean_value<-mean(data)
+mean_value
+sd_value<-sd(data)
+sd_value
+hist(data,
+main="Histogram of data",
+xlab="values",
+col="lightblue",
+border="black")
+boxplot(data,
+main="Boxplot of data",
+col="lightgreen",
+horizontal=TRUE)
+
+Pract 4 : Linear Regression 
+hours <- c(1, 2, 3, 4, 5)
+scores <- c(50, 55, 65, 70, 75)
+data <- data.frame(hours, scores)
+print(data)
+model <- lm(scores ~ hours, data = data)
+summary(model)
+new_data<-data.frame(hours=6)
+predict(model,new_data)
+plot(data$hours, data$scores,
+main = "Linear Regression Example",
+xlab = "Study Hours",
+ylab = "Scores",
+pch = 16)
+# Add regression line
+abline(model, col = "blue")
+
+Pract 5 : Association rule
+str(Titanic)
+df<-as.data.frame(Titanic)
+head(df)
+for(i in 1:4) { titanic.raw <- cbind(titanic.raw, rep(as.character(df[,i]), df$Freq)) } 
+titanic.raw <- as.data.frame(titanic.raw)
+names(titanic.raw) <- names(df)[1:4]
+dim(titanic.raw)
+str(titanic.raw)
+head(titanic.raw)
+summary(titanic.raw)
+
+Pract 6 : K Means Clustering
+iris2 <- iris
+iris2$Species <- NULL
+(kmeans.result <- kmeans(iris2, 3))
+table(iris$Species, kmeans.result$cluster)
+plot(iris2[c("Sepal.Length", "Sepal.Width")], col=kmeans.result$cluster)
+points(kmeans.result$centers[,c("Sepal.Length", "Sepal.Width")], col=1:3, pch=8, cex=2)
+
+Pract 7 : Time series analysis
+a<-ts(1:30,frequency=12,start=c(2011,3))
+print(a)
+str(a)
+attributes(a)
+plot(AirPassengers)
+apts<-ts(AirPassengers, frequency=12)
+f<-decompose(apts)
+#seasonal figures
+f$figure
+plot(f$figure,type="b",xaxt="n",xlab="")
+monthNames<-months(ISOdate(2011,1:12,1))
+axis(1,at=1:12,labels=monthNames,las=2)
+fit <-arima(AirPassengers, order=c(1,0,0), list(order=c(2,1,0), period=12))
+fore <-predict(fit,n.ahead=24)
+#error bounds at 95% confidence level
+U<-fore$pred+2*fore$se
+L<-fore$pred-2*fore$se
+ts.plot(AirPassengers,fore$pred,U,L,col=c(1,2,4,4),lty=c(1,1,2,2))
+
+Pract 8 : Recommendation system
+install.packages("recommenderlab")
+library(recommenderlab)
+ratings_matrix<-matrix(c(
+5,NA,3,1,
+4,2,NA,1,
+1,2,3,5,
+NA,3,4,4
+),nrow=4,byrow=TRUE)
+colnames(ratings_matrix)<-c("Item1","Item2","Item3","Item4")
+rownames(ratings_matrix)<-c("User1","User2","User3","User4")
+ratings_matrix
+ratings<-as(ratings_matrix, "realRatingMatrix")
+ratings
+rec_model<-Recommender(ratings,method="UBCF")
+rec_model
+recommendations<-predict(rec_model,ratings,n=2)
+as(recommendations,"list")
+recommended_items<-as(recommendations,"list")
+print(recommended_items)
+
+Pract 9 : Anomaly Detection 
+# Install package
+install.packages("isotree")
+# Load library
+library(isotree)
+# Create dataset
+data <- data.frame(
+  transactions = c(100, 120, 130, 150, 170, 200, 500, 210, 220, 230)
+)
+print(data)
+# Train Isolation Forest model
+model <- isolation.forest(data)
+# Predict anomaly scores
+scores <- predict(model, data, type="score")
+print(scores)
+# Add scores to dataset
+data$anomaly_score <- scores
+# Detect anomalies
+data$anomaly <- ifelse(data$anomaly_score > 0.6, "Anomaly", "Normal")
+print(data)
