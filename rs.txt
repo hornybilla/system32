@@ -1,0 +1,19 @@
+install.packages("recommenderlab")
+library(recommenderlab)
+ratings_matrix<-matrix(c(
+5,NA,3,1,
+4,2,NA,1,
+1,2,3,5,
+NA,3,4,4
+),nrow=4,byrow=TRUE)
+colnames(ratings_matrix)<-c("Item1","Item2","Item3","Item4")
+rownames(ratings_matrix)<-c("User1","User2","User3","User4")
+ratings_matrix
+ratings<-as(ratings_matrix, "realRatingMatrix")
+ratings
+rec_model<-Recommender(ratings,method="UBCF")
+rec_model
+recommendations<-predict(rec_model,ratings,n=2)
+as(recommendations,"list")
+recommended_items<-as(recommendations,"list")
+print(recommended_items)
