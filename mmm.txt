@@ -1,0 +1,15 @@
+data<-c(10,15,20,22,25,30,35,40,45,50)
+data
+mean_value<-mean(data)
+mean_value
+sd_value<-sd(data)
+sd_value
+hist(data,
+main="Histogram of data",
+xlab="values",
+col="lightblue",
+border="black")
+boxplot(data,
+main="Boxplot of data",
+col="lightgreen",
+horizontal=TRUE)
